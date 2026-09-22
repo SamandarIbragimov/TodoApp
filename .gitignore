@@ -1,0 +1,73 @@
+## .NET Core / ASP.NET Core
+
+# Build natijalari
+bin/
+obj/
+out/
+
+# Visual Studio fayllari
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# Build natijalari (qo'shimcha)
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Test natijalari
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# appsettings ichidagi maxfiy ma'lumotlar (agar bo'lsa)
+appsettings.Development.json
+appsettings.Local.json
+*.env
+
+# Loyihaga oid: JSON fayl bilan saqlangan vazifalar
+# (Agar boshlang'ich holatini repo'da saqlamoqchi bo'lsangiz, quyidagi qatorni o'chirib tashlang)
+# Data/tasks.json
+
+# Secrets
+secrets.json
+*.pfx
+
+# Rider/VS avtomatik generatsiya qiladigan fayllar
+*.DotSettings.user

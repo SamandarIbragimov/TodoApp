@@ -129,7 +129,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = 'rest_framework:login'
-LOGIN_REDIRECT_URL = '/api/docs/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = 'rest_framework:login'
 
 # Default primary key field type

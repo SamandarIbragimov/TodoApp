@@ -9,7 +9,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     # Asosiy sahifa (templates/base.html) — API'ga JS orqali ulanadi
     path('', login_required(TemplateView.as_view(template_name='base.html')), name='home'),
-
     path('admin/', admin.site.urls),
 
     path('api/accounts/', include('accounts.urls')),

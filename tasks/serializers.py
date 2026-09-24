@@ -13,7 +13,10 @@ class TagSerializer(serializers.ModelSerializer):
 
     def validate_name(self, value):
         user = self.context['request'].user
-        qs = Tag.objects.filter(user=user, name=value)
+        value = value.strip()
+        if not value:
+            raise serializers.ValidationError('Teg nomi bo\'sh bo\'lishi mumkin emas.')
+        qs = Tag.objects.filter(user=user, name__iexact=value)
         if self.instance:
             qs = qs.exclude(pk=self.instance.pk)
         if qs.exists():
@@ -27,7 +30,12 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'task', 'user', 'text', 'created_at')
-        read_only_fields = ('created_at',)
+        read_only_fields = ('created_at', 'user')
+
+    def validate_text(self, value):
+        if not value.strip():
+            raise serializers.ValidationError('Izoh bo\'sh bo\'lishi mumkin emas.')
+        return value
 
     def validate_task(self, task):
         user = self.context['request'].user

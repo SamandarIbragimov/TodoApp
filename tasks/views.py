@@ -58,9 +58,12 @@ class CommentViewSet(viewsets.ModelViewSet):
         if getattr(self, 'swagger_fake_view', False):
             return Comment.objects.none()
         user = self.request.user
-        return Comment.objects.filter(
+        queryset = Comment.objects.filter(
             Q(task__created_by=user) | Q(task__assigned_to=user)
         ).select_related('user').distinct()
+        if self.action in {'update', 'partial_update', 'destroy'}:
+            queryset = queryset.filter(user=user)
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

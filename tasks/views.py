@@ -1,7 +1,11 @@
 from django.db.models import Q
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import serializers, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Comment, Tag, Task
+from .sa import task_stats
 from .serializers import CommentSerializer, TagSerializer, TaskDetailSerializer, TaskSerializer
 
 
@@ -35,6 +39,15 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    @extend_schema(responses=inline_serializer('TaskStats', {
+        name: serializers.IntegerField()
+        for name in ('total', 'todo', 'in_progress', 'done', 'high_priority', 'overdue')
+    }))
+    @action(detail=False)
+    def stats(self, request):
+        """Tasklar statistikasi (SQLAlchemy orqali hisoblanadi)."""
+        return Response(task_stats(request.user.id))
 
 
 class TagViewSet(viewsets.ModelViewSet):

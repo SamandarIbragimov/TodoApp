@@ -78,9 +78,18 @@ async function loadTasks() {
         } else {
             tasks.forEach((task) => listEl.appendChild(renderTask(task)));
         }
-        countEl.textContent = `Jami: ${tasks.length} ta`;
+        loadStats();
     } catch (e) {
         listEl.innerHTML = '';
+        showError(e.message);
+    }
+}
+
+async function loadStats() {
+    try {
+        const stats = await api(window.API.stats);
+        countEl.textContent = `Jami: ${stats.total} ta · Bajarildi: ${stats.done} ta`;
+    } catch (e) {
         showError(e.message);
     }
 }

@@ -1,0 +1,21 @@
+# Asosiy framework
+Django>=5.2,<5.3
+
+# Avatar va rasmlar uchun (ImageField)
+Pillow>=10.0
+
+# .env faylidan maxfiy sozlamalarni o'qish
+python-dotenv>=1.0
+
+# Production: PostgreSQL
+psycopg2-binary>=2.9
+dj-database-url>=2.1
+
+# Production: server va static fayllar
+gunicorn>=22.0
+whitenoise>=6.6
+
+# REST API va Swagger hujjatlari
+djangorestframework>=3.15
+drf-spectacular>=0.28
+django-filter>=24.0

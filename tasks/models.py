@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 
 
 class Tag(models.Model):
@@ -23,6 +24,16 @@ class Tag(models.Model):
         return self.name
 
 
+class TaskQuerySet(models.QuerySet):
+    def visible_to(self, user):
+        """Shaxsiy tasklar (yaratgan/tayinlangan) + foydalanuvchi a'zo bo'lgan loyihalar tasklari."""
+        from projects.models import Project
+
+        personal = Q(project__isnull=True) & (Q(created_by=user) | Q(assigned_to=user))
+        in_my_projects = Q(project__in=Project.objects.filter(memberships__user=user))
+        return self.filter(personal | in_my_projects)
+
+
 class Task(models.Model):
     class Status(models.TextChoices):
         TODO = 'todo', 'To do'
@@ -39,6 +50,14 @@ class Task(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.TODO)
     priority = models.CharField(max_length=10, choices=Priority.choices, default=Priority.MEDIUM)
     due_date = models.DateField(null=True, blank=True)
+    project = models.ForeignKey(
+        'projects.Project',
+        on_delete=models.CASCADE,
+        related_name='tasks',
+        null=True,
+        blank=True,
+        help_text="Bo'sh bo'lsa — shaxsiy task",
+    )
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -46,14 +65,18 @@ class Task(models.Model):
         null=True,
         blank=True,
     )
+    # Muallif o'chirilsa jamoa taski saqlanib qoladi
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='created_tasks',
     )
     tags = models.ManyToManyField(Tag, related_name='tasks', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = TaskQuerySet.as_manager()
 
     class Meta:
         ordering = ['-created_at']
@@ -73,10 +96,11 @@ class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='comments',
     )
-    text = models.TextField()
+    text = models.TextField(max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

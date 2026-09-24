@@ -1,0 +1,63 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}A'zolar · {{ project.name }}{% endblock %}
+{% block page_id %}project{% endblock %}
+{% block content %}
+{{ project.pk|json_script:"project-id" }}
+<div class="page-header">
+    <div>
+        <div class="breadcrumb">
+            <a href="{% url 'dashboard' %}">Loyihalar</a> /
+            <a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> / A'zolar
+        </div>
+        <h1>Jamoa a'zolari</h1>
+        <p class="subtitle">Loyihaga kim kira oladi va nima qila oladi</p>
+    </div>
+</div>
+
+<div class="grid-2">
+    <section class="card">
+        <div class="card-header">
+            <h2>A'zolar</h2>
+            <span class="badge soft" id="member-count"></span>
+        </div>
+        <ul class="list" id="members"></ul>
+    </section>
+
+    <aside class="stack">
+        <section class="card hidden" id="invite-card">
+            <div class="card-header"><h2>Taklif yuborish</h2></div>
+            <form class="card-body stack" id="invite-form">
+                <div class="field">
+                    <label for="invite-user">Username yoki email</label>
+                    <input class="input" id="invite-user" name="user" required placeholder="ali yoki ali@mail.uz">
+                </div>
+                <div class="field">
+                    <label for="invite-role">Rol</label>
+                    <select class="select" id="invite-role" name="role">
+                        <option value="member">A'zo — vazifalarni bajaradi</option>
+                        <option value="admin">Admin — a'zolar va vazifalarni boshqaradi</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Taklif yuborish</button>
+                <p class="hint muted small">Foydalanuvchi taklifni qabul qilgandan so'ng loyihaga qo'shiladi.</p>
+            </form>
+        </section>
+
+        <section class="card hidden" id="pending-card">
+            <div class="card-header"><h2>Kutilayotgan takliflar</h2></div>
+            <ul class="list" id="pending"></ul>
+        </section>
+
+        <section class="card">
+            <div class="card-header"><h2>Rollar</h2></div>
+            <div class="card-body stack small">
+                <div><span class="pill plain role-owner">Egasi</span> <span class="muted">— hamma narsa, jumladan loyihani o'chirish va egalikni o'tkazish</span></div>
+                <div><span class="pill plain role-admin">Admin</span> <span class="muted">— a'zolarni taklif qiladi, vazifalarni istalgan a'zoga tayinlaydi</span></div>
+                <div><span class="pill plain role-member">A'zo</span> <span class="muted">— vazifa yaratadi, o'ziga tayinlanganlarini bajaradi</span></div>
+            </div>
+        </section>
+    </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/members.js' %}"></script>{% endblock %}

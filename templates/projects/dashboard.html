@@ -1,0 +1,39 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}Bosh sahifa{% endblock %}
+{% block page_id %}dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 id="greeting">Salom, {{ user.first_name|default:user.username }}!</h1>
+        <p class="subtitle" id="today"></p>
+    </div>
+    <div class="actions">
+        <button class="btn" id="new-project" type="button">Yangi loyiha</button>
+        <button class="btn btn-primary" id="new-task" type="button">Yangi vazifa</button>
+    </div>
+</div>
+
+<section id="invitations" class="stack hidden" style="margin-bottom: 24px"></section>
+
+<section class="stats" id="stats"></section>
+
+<div class="grid-2">
+    <section class="stack">
+        <div class="row">
+            <h2>Loyihalarim</h2>
+            <span class="badge soft" id="project-count"></span>
+        </div>
+        <div class="projects-grid" id="projects"></div>
+    </section>
+
+    <section class="card">
+        <div class="card-header">
+            <h2>Yaqin muddatlar</h2>
+            <a href="{% url 'task-list-page' %}?ordering=due_date" class="small">Barchasi</a>
+        </div>
+        <div id="upcoming"></div>
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/dashboard.js' %}"></script>{% endblock %}

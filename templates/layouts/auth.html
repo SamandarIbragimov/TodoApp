@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+{% block body %}
+<div class="auth">
+    <aside class="auth-aside">
+        <div class="brand" style="color: #fff; padding: 0">
+            <span class="brand-mark" style="background: rgba(255,255,255,.2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            </span>
+            Task Management
+        </div>
+        <div>
+            <h2>Jamoangiz bilan vazifalarni tartibli boshqaring</h2>
+            <ul>
+                <li>✓ Loyihalar va jamoadoshlarni taklif qilish</li>
+                <li>✓ Vazifalarni tayinlash va holatini kuzatish</li>
+                <li>✓ Izohlar, teglar va muddatlar</li>
+            </ul>
+        </div>
+        <p style="opacity: .7; font-size: 13px">© Task Management jamoasi</p>
+    </aside>
+    <main class="auth-main">
+        <div class="auth-card">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

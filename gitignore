@@ -1,0 +1,39 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ===== Virtual environment =====
+venv/
+.venv/
+env/
+ENV/
+
+# ===== Django =====
+*.log
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+
+# ===== Maxfiy sozlamalar =====
+.env
+.env.local
+.env.*.local
+
+# ===== Test va coverage =====
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ===== IDE / muharrirlar =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Operatsion tizim fayllari =====
+.DS_Store
+Thumbs.db
+desktop.ini

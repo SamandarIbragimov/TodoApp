@@ -177,6 +177,27 @@ class FilterAndStatsTests(TaskTestCase):
         results = self.client.get(URL, {'search': 'Bugun'}).data['results']
         self.assertEqual(results[0]['comments_count'], 2)
 
+    def test_stats_include_project_tasks_created_by_others(self):
+        # member hech narsa yaratmagan va unga tayinlanmagan, lekin loyiha taskini ko'radi
+        self.client.force_authenticate(self.member)
+        self.assertEqual(self.client.get(f'{URL}stats/').data['total'], 1)
+        self.client.force_authenticate(self.outsider)
+        self.assertEqual(self.client.get(f'{URL}stats/').data['total'], 0)
+
+    def test_stats_match_orm_visibility(self):
+        from .sa import task_stats
+
+        for user in (self.owner, self.member, self.outsider):
+            visible = Task.objects.visible_to(user)
+            stats = task_stats(user.id)
+            self.assertEqual(stats['total'], visible.count(), user)
+            for status_value, count in stats['by_status'].items():
+                self.assertEqual(count, visible.filter(status=status_value).count(), user)
+
+    def test_stats_invalid_project(self):
+        response = self.client.get(f'{URL}stats/', {'project': 'abc'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_stats_respects_filters(self):
         response = self.client.get(f'{URL}stats/', {'project': self.project.pk})
         self.assertEqual(response.data['total'], 1)

@@ -1,7 +1,6 @@
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Prefetch
-from django.utils import timezone
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -11,6 +10,7 @@ from .filters import TaskFilter
 from .pagination import TaskPagination
 from .models import Comment, Tag, Task
 from .permissions import CommentPermission, TaskPermission
+from .sa import task_stats
 from .serializers import (
     CommentSerializer,
     TagSerializer,
@@ -36,10 +36,8 @@ class TaskViewSet(viewsets.ModelViewSet):
             Task.objects.visible_to(self.request.user)
             .select_related('created_by', 'assigned_to', 'project')
             .prefetch_related('tags')
+            .annotate(comments_count=Count('comments', distinct=True))
         )
-        # stats guruhlab sanaydi — izohlar JOIN'i u yerda sonlarni buzadi
-        if self.action != 'stats':
-            qs = qs.annotate(comments_count=Count('comments', distinct=True))
         if self.action == 'retrieve':
             qs = qs.prefetch_related(Prefetch('comments', Comment.objects.select_related('user')))
         return qs
@@ -52,26 +50,18 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    @extend_schema(responses=TaskStatsSerializer, summary='Tasklar statistikasi (dashboard)')
+    @extend_schema(
+        parameters=[OpenApiParameter('project', int, description="Faqat shu loyiha bo'yicha")],
+        responses=TaskStatsSerializer,
+        summary='Tasklar statistikasi (dashboard, SQLAlchemy orqali hisoblanadi)',
+    )
     @action(detail=False, methods=['get'], pagination_class=None)
     def stats(self, request):
-        """Filtrlarni hisobga olgan holda tasklar soni: status, priority, muddati o'tganlar."""
-        qs = self.filter_queryset(self.get_queryset()).order_by()
-        today = timezone.localdate()
-        open_tasks = qs.exclude(status=Task.Status.DONE)
-
-        def counts(field, choices):
-            data = dict.fromkeys(choices.values, 0)
-            data.update(qs.values_list(field).annotate(n=Count('id')))
-            return data
-
-        return Response({
-            'total': qs.count(),
-            'by_status': counts('status', Task.Status),
-            'by_priority': counts('priority', Task.Priority),
-            'overdue': open_tasks.filter(due_date__lt=today).count(),
-            'due_today': open_tasks.filter(due_date=today).count(),
-        })
+        """Foydalanuvchi ko'ra oladigan tasklar soni: status, priority, muddati o'tganlar."""
+        project = request.query_params.get('project') or None
+        if project is not None and not project.isdigit():
+            raise ValidationError({'project': 'Butun son bo\'lishi kerak.'})
+        return Response(task_stats(request.user.id, int(project) if project else None))
 
 
 class TagViewSet(viewsets.ModelViewSet):

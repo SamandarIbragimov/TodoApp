@@ -14,9 +14,11 @@
         <nav class="stack" style="gap: 2px">
             <a href="{% url 'dashboard' %}" class="nav-link" data-nav="dashboard" data-icon="home">Bosh sahifa</a>
             <a href="{% url 'task-list-page' %}" class="nav-link" data-nav="tasks" data-icon="list">Mening vazifalarim</a>
+            {% comment %} Takliflar bo'limi vaqtincha yashirilgan — funksionali (API) ishlashda qoladi
             <a href="{% url 'dashboard' %}#invitations" class="nav-link" data-nav="invitations" data-icon="mail">
                 Takliflar <span class="badge count hidden" id="invitation-count"></span>
             </a>
+            {% endcomment %}
         </nav>
 
         <div class="nav-section">

@@ -17,7 +17,11 @@ function renderToday() {
     $('#today').textContent = `Bugun ${d.getDate()}-${MONTHS[d.getMonth()]}, ${WEEKDAYS[d.getDay()]}`;
 }
 
+// Takliflar bo'limi vaqtincha yashirilgan; qayta yoqish uchun true qiling
+const INVITATIONS_ENABLED = false;
+
 function renderInvitations(invitations) {
+    if (!INVITATIONS_ENABLED) return;
     const section = $('#invitations');
     section.classList.toggle('hidden', invitations.length === 0);
     clear(section, invitations.map((invitation) => {
@@ -110,5 +114,5 @@ initApp().then(({ projects: list, invitations }) => {
     renderProjects();
     renderStats($('#stats'));
     renderUpcoming();
-    if (window.location.hash === '#invitations' && invitations.length) $('#invitations').scrollIntoView();
+    if (INVITATIONS_ENABLED && window.location.hash === '#invitations' && invitations.length) $('#invitations').scrollIntoView();
 });

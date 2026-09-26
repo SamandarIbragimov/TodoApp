@@ -22,6 +22,33 @@ python manage.py runserver
 
 Testlar: `python manage.py test`
 
+## Docker
+
+Lokal (PostgreSQL bilan birga):
+
+```bash
+docker compose up --build
+docker compose exec web python manage.py createsuperuser
+```
+
+Ilova: http://localhost:8000/. Migratsiyalar konteyner ishga tushganda avtomatik qo'llanadi.
+
+Faqat image (masalan, Docker Hub uchun):
+
+```bash
+docker build -t <login>/todo-app .
+docker run -p 8000:8000 \
+  -e SECRET_KEY=... -e ALLOWED_HOSTS=example.com \
+  -e CSRF_TRUSTED_ORIGINS=https://example.com \
+  -e DATABASE_URL=postgres://user:pass@host:5432/db \
+  <login>/todo-app
+docker push <login>/todo-app
+```
+
+`DATABASE_URL` berilmasa konteyner ichidagi SQLite ishlatiladi va konteyner o'chirilganda ma'lumotlar yo'qoladi.
+
+Render: `render.yaml` (Blueprint) repo ildizida.
+
 ## Sahifalar
 
 | URL | Sahifa |

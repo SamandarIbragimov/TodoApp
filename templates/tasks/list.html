@@ -1,0 +1,18 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}Mening vazifalarim{% endblock %}
+{% block page_id %}tasks{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Mening vazifalarim</h1>
+        <p class="subtitle">Shaxsiy vazifalar va barcha loyihalaringizdagi vazifalar</p>
+    </div>
+    <div class="actions">
+        <button class="btn btn-primary" id="new-task" type="button">Yangi vazifa</button>
+    </div>
+</div>
+<section class="stats" id="stats"></section>
+<section id="tasks"></section>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/tasks.js' %}"></script>{% endblock %}

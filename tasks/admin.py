@@ -10,8 +10,10 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'priority', 'due_date', 'created_by', 'assigned_to')
-    list_filter = ('status', 'priority')
+    list_display = (
+        'title', 'project', 'status', 'priority', 'due_date', 'created_by', 'assigned_to',
+    )
+    list_filter = ('status', 'priority', 'project')
     search_fields = ('title', 'description')
     filter_horizontal = ('tags',)
     inlines = [CommentInline]

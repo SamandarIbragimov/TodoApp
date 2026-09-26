@@ -1,0 +1,26 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}{{ project.name }}{% endblock %}
+{% block page_id %}project{% endblock %}
+{% block content %}
+{{ project.pk|json_script:"project-id" }}
+<div class="page-header">
+    <div style="min-width: 0">
+        <div class="breadcrumb"><a href="{% url 'dashboard' %}">Loyihalar</a> / {{ project.name }}</div>
+        <div class="row wrap">
+            <h1 id="project-name">{{ project.name }}</h1>
+            <span id="project-role"></span>
+        </div>
+        <p class="subtitle" id="project-description">{{ project.description }}</p>
+    </div>
+    <div class="actions">
+        <a class="btn" href="{% url 'project-members' project.pk %}" id="members-link">A'zolar</a>
+        <button class="btn hidden" id="edit-project" type="button">Tahrirlash</button>
+        <button class="btn btn-danger hidden" id="delete-project" type="button">O'chirish</button>
+        <button class="btn btn-primary" id="new-task" type="button">Yangi vazifa</button>
+    </div>
+</div>
+<section class="stats" id="stats"></section>
+<section id="tasks"></section>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/project.js' %}"></script>{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'layouts/auth.html' %}
+{% load static %}
+{% block title %}Kirish{% endblock %}
+{% block content %}
+<h1>Xush kelibsiz 👋</h1>
+<p class="muted">Davom etish uchun hisobingizga kiring</p>
+<form id="login-form" novalidate>
+    <div class="form-error hidden" id="form-error" role="alert"></div>
+    <div class="field">
+        <label for="username">Username yoki email</label>
+        <input class="input" id="username" name="username" autocomplete="username" required autofocus>
+    </div>
+    <div class="field">
+        <label for="password">Parol</label>
+        <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Kirish</button>
+</form>
+<p class="muted" style="margin-top: 20px; text-align: center">
+    Hisobingiz yo'qmi? <a href="{% url 'register-page' %}">Ro'yxatdan o'ting</a>
+</p>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/login.js' %}"></script>{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}Profil{% endblock %}
+{% block page_id %}profile{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Profil</h1>
+        <p class="subtitle">Shaxsiy ma'lumotlaringiz va teglaringiz</p>
+    </div>
+</div>
+
+<div class="grid-2">
+    <section class="card">
+        <div class="card-header"><h2>Shaxsiy ma'lumotlar</h2></div>
+        <form class="card-body stack" id="profile-form">
+            <div class="row" style="gap: 16px">
+                <span id="avatar-preview"></span>
+                <div class="stack" style="gap: 6px">
+                    <strong id="profile-username"></strong>
+                    <div class="row">
+                        <label class="btn btn-sm" for="avatar-input">Rasm yuklash</label>
+                        <input class="sr-only" id="avatar-input" type="file" accept="image/*">
+                        <button class="btn btn-ghost btn-sm hidden" id="avatar-remove" type="button">Olib tashlash</button>
+                    </div>
+                    <span class="muted small">PNG yoki JPG, ko'pi bilan 2 MB</span>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label for="first_name">Ism</label><input class="input" id="first_name" name="first_name" maxlength="150"></div>
+                <div class="field"><label for="last_name">Familiya</label><input class="input" id="last_name" name="last_name" maxlength="150"></div>
+                <div class="field full"><label for="email">Email</label><input class="input" id="email" name="email" type="email" required></div>
+            </div>
+            <div class="row">
+                <span class="muted small" id="joined"></span>
+                <div class="spacer"></div>
+                <button class="btn btn-primary" type="submit">Saqlash</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card" id="tags">
+        <div class="card-header"><h2>Teglarim</h2></div>
+        <div class="card-body stack">
+            <p class="muted small">Teglar vazifalarni guruhlash uchun. Ularni faqat siz ko'rasiz va biriktira olasiz.</p>
+            <div class="row wrap" id="tag-list"></div>
+            <form class="row" id="tag-form">
+                <input class="input sm" name="name" required maxlength="50" placeholder="Yangi teg nomi">
+                <input type="color" name="color" value="#4f46e5" title="Rang" style="width: 36px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer">
+                <button class="btn btn-sm" type="submit">Qo'shish</button>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/profile.js' %}"></script>{% endblock %}

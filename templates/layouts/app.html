@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block body %}
+{{ current_user|json_script:"current-user" }}
+<div class="app" id="app">
+    <aside class="sidebar" id="sidebar">
+        <a href="{% url 'dashboard' %}" class="brand">
+            <span class="brand-mark">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            </span>
+            Task Management
+        </a>
+
+        <nav class="stack" style="gap: 2px">
+            <a href="{% url 'dashboard' %}" class="nav-link" data-nav="dashboard" data-icon="home">Bosh sahifa</a>
+            <a href="{% url 'task-list-page' %}" class="nav-link" data-nav="tasks" data-icon="list">Mening vazifalarim</a>
+            <a href="{% url 'dashboard' %}#invitations" class="nav-link" data-nav="invitations" data-icon="mail">
+                Takliflar <span class="badge count hidden" id="invitation-count"></span>
+            </a>
+        </nav>
+
+        <div class="nav-section">
+            Loyihalar
+            <button class="btn btn-ghost btn-icon btn-sm" id="sidebar-new-project" title="Yangi loyiha" type="button"></button>
+        </div>
+        <nav class="nav-projects" id="sidebar-projects">
+            <div class="skeleton" style="margin: 8px 10px"></div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="nav-link btn-ghost" id="theme-toggle" type="button" style="border: 0; background: none; font: inherit; cursor: pointer; width: 100%"></button>
+            <a href="{% url 'profile-page' %}" class="user-chip" data-nav="profile">
+                <span id="sidebar-avatar"></span>
+                <span class="meta">
+                    <div style="font-weight: 600">{{ user.get_full_name|default:user.username }}</div>
+                    <div class="muted small">{{ user.email|default:user.username }}</div>
+                </span>
+            </a>
+            <button class="nav-link" id="logout" type="button" style="border: 0; background: none; font: inherit; cursor: pointer; width: 100%" data-icon="logout">Chiqish</button>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="btn btn-ghost btn-icon" id="menu-toggle" type="button" aria-label="Menyu"></button>
+            <strong>Task Management</strong>
+        </header>
+        <main class="content" data-page="{% block page_id %}{% endblock %}">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

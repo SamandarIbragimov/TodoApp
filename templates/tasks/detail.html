@@ -1,0 +1,49 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block page_id %}{% if task.project_id %}project{% else %}tasks{% endif %}{% endblock %}
+{% block content %}
+{{ task.pk|json_script:"task-id" }}
+<div class="page-header">
+    <div style="min-width: 0">
+        <div class="breadcrumb">
+            {% if task.project %}
+                <a href="{% url 'dashboard' %}">Loyihalar</a> / <a href="{% url 'project-detail' task.project_id %}">{{ task.project.name }}</a>
+            {% else %}
+                <a href="{% url 'task-list-page' %}">Mening vazifalarim</a>
+            {% endif %}
+        </div>
+        <h1 class="detail-title" id="task-title">{{ task.title }}</h1>
+    </div>
+    <div class="actions" id="task-actions"></div>
+</div>
+
+<div class="grid-2">
+    <div class="stack">
+        <section class="card">
+            <div class="card-header"><h2>Tavsif</h2></div>
+            <div class="card-body"><p class="description" id="task-description"></p></div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">
+                <h2>Izohlar</h2>
+                <span class="badge soft" id="comment-count"></span>
+            </div>
+            <div class="card-body stack">
+                <div class="comments" id="comments"></div>
+                <form class="stack" id="comment-form" style="gap: 8px">
+                    <textarea class="textarea" name="text" required maxlength="2000" placeholder="Izoh yozing... (Ctrl+Enter — yuborish)"></textarea>
+                    <div class="row"><div class="spacer"></div><button class="btn btn-primary" type="submit">Yuborish</button></div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <aside class="card">
+        <div class="card-header"><h2>Ma'lumotlar</h2></div>
+        <div class="card-body"><dl class="props" id="task-props"></dl></div>
+    </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/task-detail.js' %}"></script>{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'layouts/auth.html' %}
+{% load static %}
+{% block title %}Ro'yxatdan o'tish{% endblock %}
+{% block content %}
+<h1>Hisob yaratish</h1>
+<p class="muted">Bir daqiqada ro'yxatdan o'ting</p>
+<form id="register-form" novalidate>
+    <div class="form-error hidden" id="form-error" role="alert"></div>
+    <div class="field">
+        <label for="username">Username</label>
+        <input class="input" id="username" name="username" autocomplete="username" required autofocus>
+        <div class="error" data-error="username"></div>
+    </div>
+    <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" name="email" type="email" autocomplete="email" required>
+        <div class="error" data-error="email"></div>
+    </div>
+    <div class="field">
+        <label for="password">Parol</label>
+        <input class="input" id="password" name="password" type="password" autocomplete="new-password" required>
+        <div class="hint">Kamida 8 ta belgi, faqat raqamlardan iborat bo'lmasin</div>
+        <div class="error" data-error="password"></div>
+    </div>
+    <div class="field">
+        <label for="password2">Parolni takrorlang</label>
+        <input class="input" id="password2" name="password2" type="password" autocomplete="new-password" required>
+        <div class="error" data-error="password2"></div>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Ro'yxatdan o'tish</button>
+</form>
+<p class="muted" style="margin-top: 20px; text-align: center">
+    Hisobingiz bormi? <a href="{% url 'login' %}">Kiring</a>
+</p>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'js/pages/register.js' %}"></script>{% endblock %}

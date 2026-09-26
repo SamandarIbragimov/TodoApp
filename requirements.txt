@@ -7,6 +7,9 @@ Pillow>=10.0
 # .env faylidan maxfiy sozlamalarni o'qish
 python-dotenv>=1.0
 
+# SQLite bilan SQLAlchemy orqali ishlash (statistika so'rovlari)
+SQLAlchemy>=2.0
+
 # Production: PostgreSQL
 psycopg2-binary>=2.9
 dj-database-url>=2.1

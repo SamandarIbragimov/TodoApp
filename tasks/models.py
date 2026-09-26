@@ -1,11 +1,17 @@
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
-    color = models.CharField(max_length=7, default='#6c757d', help_text='HEX rang, masalan #ff0000')
+    color = models.CharField(
+        max_length=7,
+        default='#6c757d',
+        validators=[RegexValidator(r'^#[0-9A-Fa-f]{6}$', 'Rang #RRGGBB formatida bo\'lishi kerak.')],
+        help_text='HEX rang, masalan #ff0000',
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

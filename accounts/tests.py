@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from accounts.models import Profile
 from accounts.ratelimit import MAX_FAILURES
 
 User = get_user_model()
@@ -163,3 +165,35 @@ class AuthPagesTests(AccountsTestCase):
         response = self.client.get('/accounts/profile/')
         self.assertContains(response, 'id="current-user"')
         self.assertEqual(response.context['current_user']['username'], 'ali')
+
+
+class AccountApiTests(AccountsTestCase):
+    def test_register_creates_user_with_hashed_password_and_profile(self):
+        response = self.client.post(
+            reverse('register'),
+            {
+                'username': 'new-user',
+                'email': 'new@example.com',
+                'password': 'Strong-password-123',
+                'password2': 'Strong-password-123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        user = User.objects.get(username='new-user')
+        self.assertTrue(user.check_password('Strong-password-123'))
+        self.assertTrue(Profile.objects.filter(user=user).exists())
+
+    def test_register_rejects_mismatched_passwords(self):
+        response = self.client.post(
+            reverse('register'),
+            {
+                'username': 'new-user',
+                'password': 'Strong-password-123',
+                'password2': 'different-password-123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

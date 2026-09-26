@@ -1,7 +1,7 @@
 # TodoApp
 
 Django asosidagi jamoaviy Task/ToDo boshqaruv tizimi: loyihalar, a'zolar (owner/admin/member),
-tasklar, teglar va izohlar.
+tasklar, teglar va izohlar......
 
 ## Ishga tushirish
 

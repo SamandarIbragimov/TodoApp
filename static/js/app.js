@@ -72,8 +72,10 @@ export async function refreshSidebar() {
                 : el('div', { class: 'muted small', style: { padding: '4px 10px' }, text: "Hozircha loyiha yo'q" }),
         );
         const badge = $('#invitation-count');
-        badge.textContent = invitations.length;
-        badge.classList.toggle('hidden', invitations.length === 0);
+        if (badge) {
+            badge.textContent = invitations.length;
+            badge.classList.toggle('hidden', invitations.length === 0);
+        }
         return { projects, invitations };
     } catch (error) {
         clear(container, el('div', { class: 'muted small', style: { padding: '4px 10px' }, text: 'Yuklab bo\'lmadi' }));
